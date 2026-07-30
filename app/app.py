@@ -9,6 +9,9 @@ app = Flask(__name__)
 
 STRIPE_API_KEY = os.environ.get("STRIPE_API_KEY", "")
 DB_PASSWORD = os.environ.get("DB_PASSWORD", "")
+APP_ENV = os.environ.get("APP_ENV", "development")
+LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
+PAYMENT_PROVIDER = os.environ.get("PAYMENT_PROVIDER", "stripe")
 
 LEDGER = [
     {"id": "txn_1001", "pan": "4242424242424242", "amount": 4200, "currency": "USD", "status": "captured"},
@@ -18,7 +21,12 @@ LEDGER = [
 
 @app.route("/health")
 def health():
-    return jsonify(status="ok")
+    return jsonify(
+        status="ok",
+        environment=APP_ENV,
+        log_level=LOG_LEVEL,
+        payment_provider=PAYMENT_PROVIDER
+    )
 
 
 @app.route("/tokenize", methods=["POST"])

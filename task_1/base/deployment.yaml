@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ledger-api
+  namespace: payments
+  labels:
+    app: ledger-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ledger-api
+  template:
+    metadata:
+      labels:
+        app: ledger-api
+    spec:
+      serviceAccountName: ledger-api-sa
+      containers:
+        - name: ledger-api
+          image: ledger-api:starter
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+              name: ledger-api-config
+          env:
+            - name: STRIPE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ledger-api-secret
+                  key: STRIPE_API_KEY
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ledger-api-secret
+                  key: DB_PASSWORD
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+.DS_Store
+*.log
+
+# Ignore plaintext Kubernetes secrets
+task_1/secrets/secret.yaml
