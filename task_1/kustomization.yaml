@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - base/namespace.yaml
+  - rbac/serviceaccount.yaml
+  - rbac/role.yaml
+  - rbac/rolebinding.yaml
+  - configmap/configmap.yaml
+  - secrets/sealed-secret.yaml
+  - security-context/deployment.yaml
+  - base/service.yaml
+  - ingress/ingress.yaml
+  - kyverno/disallow-latest-tag.yaml
+  - kyverno/require-run-as-non-root.yaml
