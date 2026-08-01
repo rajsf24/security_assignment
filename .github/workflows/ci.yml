@@ -6,10 +6,31 @@ on:
       - main
 
 jobs:
-  hello:
+  build:
+    name: Build and Validate Application
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print Welcome Message
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify Python Installation
+        run: python --version
+
+      - name: Install Dependencies
         run: |
-          echo "Welcome to Task 2"
+          cd app
+          pip install -r requirements.txt
+
+      - name: Verify Application Files
+        run: |
+          cd app
+          ls -la
+
+      - name: Pipeline Completed
+        run: echo "Application validation completed successfully!"
