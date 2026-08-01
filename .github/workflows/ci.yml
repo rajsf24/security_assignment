@@ -46,6 +46,14 @@ jobs:
         run: |
           docker build -t ledger-api:ci ./app
 
+      - name: Scan Docker Image with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ledger-api:ci
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
+
       - name: List Docker Images
         run: docker images
 
