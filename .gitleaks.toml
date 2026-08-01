@@ -1,0 +1,6 @@
+title = "Security Assignment Gitleaks Configuration"
+
+[allowlist]
+paths = [
+  '''task_1/secrets/sealed-secret.yaml'''
+]
