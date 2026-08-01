@@ -37,6 +37,11 @@ jobs:
             --config auto \
             app/
 
+      - name: Run Gitleaks Secret Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Docker Image
         run: |
           docker build -t ledger-api:ci ./app
