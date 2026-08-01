@@ -1,0 +1,15 @@
+name: Secure CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Welcome Message
+        run: |
+          echo "Welcome to Task 2"
