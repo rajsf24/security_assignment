@@ -27,6 +27,13 @@ jobs:
           cd app
           pip install -r requirements.txt
 
+      - name: Build Docker Image
+        run: |
+          docker build -t ledger-api:ci ./app
+
+      - name: List Docker Images
+        run: docker images
+
       - name: Verify Application Files
         run: |
           cd app
