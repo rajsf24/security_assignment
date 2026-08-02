@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+permissions:
+  contents: read
+  packages: write
+  id-token: write
 
 jobs:
   build:
@@ -43,9 +47,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_CONFIG: .gitleaks.toml
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Docker Image
         run: |
-          docker build -t ledger-api:ci ./app
+          docker build \
+            -t ghcr.io/${{ github.repository_owner }}/ledger-api:latest \
+            ./app
+
+        - name: Push Docker Image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/ledger-api:latest
 
       - name: Scan Docker Image with Trivy
         uses: aquasecurity/trivy-action@v0.36.0
