@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/ledger-api
+  IMAGE_TAG: latest
+
 permissions:
   contents: read
   packages: write
@@ -57,20 +61,27 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build \
-            -t ghcr.io/${{ github.repository_owner }}/ledger-api:latest \
+            -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
             ./app
 
-        - name: Push Docker Image
+      - name: Push Docker Image
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/ledger-api:latest
+          docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+      - name: Display Image Reference
+        run: |
+          echo "Image pushed successfully:"
+          echo "${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
 
       - name: Scan Docker Image with Trivy
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ledger-api:ci
+          image-ref: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           format: table
-          exit-code: 0
+          scanners: vuln
+          exit-code: "0"
           severity: CRITICAL,HIGH
+
 
       - name: List Docker Images
         run: docker images
